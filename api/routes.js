@@ -6,10 +6,12 @@ module.exports = function (app) {
   app.route("/movie").get(productsCtrl.get).post(productsCtrl.store);
 
   app
-    .route("/products/:productId")
+    .route("/movie/:id")
     .get(productsCtrl.detail)
     .put(productsCtrl.update)
     .delete(productsCtrl.delete);
 
   app.route("/random").get(productsCtrl.getRandomMovie);
+
+  app.route("/user").get(productsCtrl.getUser).post(productsCtrl.storeUser);
 };

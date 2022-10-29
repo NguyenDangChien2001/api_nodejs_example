@@ -21,9 +21,16 @@ module.exports = {
       res.json(response);
     });
   },
+  getUser: (req, res) => {
+    let sql = "SELECT * FROM user";
+    db.query(sql, (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
   detail: (req, res) => {
-    let sql = "SELECT * FROM products WHERE id = ?";
-    db.query(sql, [req.params.productId], (err, response) => {
+    let sql = "SELECT * FROM movie WHERE id = ?";
+    db.query(sql, [req.params.id], (err, response) => {
       if (err) throw err;
       res.json(response[0]);
     });
@@ -39,7 +46,15 @@ module.exports = {
   },
   store: (req, res) => {
     let data = req.body;
-    let sql = "INSERT INTO products SET ?";
+    let sql = "INSERT INTO movie SET ?";
+    db.query(sql, [data], (err, response) => {
+      if (err) throw err;
+      res.json({ message: "Insert success!" });
+    });
+  },
+  storeUser: (req, res) => {
+    let data = req.body;
+    let sql = "INSERT INTO user SET ?";
     db.query(sql, [data], (err, response) => {
       if (err) throw err;
       res.json({ message: "Insert success!" });
