@@ -10,4 +10,6 @@ module.exports = function (app) {
     .get(productsCtrl.detail)
     .put(productsCtrl.update)
     .delete(productsCtrl.delete);
+
+  app.route("/random").get(productsCtrl.getRandomMovie);
 };
