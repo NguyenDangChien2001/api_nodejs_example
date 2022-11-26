@@ -3,6 +3,7 @@
 const util = require("util");
 const mysql = require("mysql");
 const db = require("./../db");
+const { response } = require("express");
 
 const table = "products";
 
@@ -32,6 +33,14 @@ module.exports = {
   getRandomMovie: (req, res) => {
     let sql = "SELECT * FROM movie order by rand() limit 1;";
     db.query(sql, (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+  getListMovie: (req, res) => {
+    let sql =
+      "SELECT * FROM movie inner join favouritelist on movie.id = favouritelist.idMovie WHERE idUser = ?";
+    db.query(sql, [req.params.id], (err, response) => {
       if (err) throw err;
       res.json(response);
     });
@@ -110,11 +119,45 @@ module.exports = {
       res.json({ message: "Insert success!" });
     });
   },
+  storeList: (req, res) => {
+    let data = req.body;
+    let sql = "INSERT INTO favouritelist SET ?";
+    db.query(sql, [data], (err, response) => {
+      if (err) {
+        res.json({ message: "Phim đã tồn tại trong danh sách" });
+        return;
+      }
+      res.json({ message: "Thêm thành công" });
+    });
+  },
   delete: (req, res) => {
     let sql = "DELETE FROM products WHERE id = ?";
     db.query(sql, [req.params.productId], (err, response) => {
       if (err) throw err;
       res.json({ message: "Delete success!" });
+    });
+  },
+  handleLogin: (req, res) => {
+    let sql = "SELECT * FROM user WHERE Email = ? and Password = ?";
+    db.query(sql, [req.body.Email, req.body.Password], (err, response) => {
+      const test = response.length;
+
+      if (err) {
+        res.json({
+          message: "Có lỗi xảy ra trong quá trình đăng nhập, vui lòng thử lại",
+        });
+      }
+      if (test == 0) {
+        res.json({
+          message: "Email hoặc mật khẩu không đúng",
+        });
+      }
+      if (test > 0) {
+        res.json({
+          message: "Đăng nhập thành công",
+          status: "success",
+        });
+      }
     });
   },
 };

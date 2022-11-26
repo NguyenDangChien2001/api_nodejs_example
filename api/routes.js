@@ -30,4 +30,11 @@ module.exports = function (app) {
   app.route("/episode/:id/:tap").get(productsCtrl.getEpisode);
 
   app.route("/episode/:id").get(productsCtrl.getAllEpisode);
+
+  app
+    .route("/list/:id")
+    .get(productsCtrl.getListMovie)
+    .post(productsCtrl.storeList);
+
+  app.route("/handleLogin").post(productsCtrl.handleLogin);
 };
